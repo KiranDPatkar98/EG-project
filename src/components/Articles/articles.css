@@ -1,0 +1,33 @@
+.articles-container {
+  padding: 20px;
+}
+
+.articles {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.article {
+  flex: 1 1 300px;
+  margin: 10px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.article:hover {
+  transform: translateY(5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.summary {
+  font-size: 14px;
+}
