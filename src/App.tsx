@@ -9,6 +9,7 @@ import './App.css';
 import Articles from './components/Articles/Articles';
 import store from './redux/store';
 import { Provider } from 'react-redux';
+import Article from './components/Article/Article';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/articles" element={<Articles />} />
-            {/* <Route path="/" element={<h1>Hii</h1>} /> */}
+            <Route path="/article/:id" element={<Article />} />
             <Route path="/" element={<Navigate replace to="/articles" />} />
           </Routes>
         </Router>

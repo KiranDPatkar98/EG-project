@@ -4,6 +4,7 @@ import Loading from '../Loading/Loading';
 import { useDispatch, useSelector } from 'react-redux';
 import { receivedArticles } from '../../redux/articleSlice';
 import { ReduxType } from '../../redux/store';
+import { useNavigate } from 'react-router-dom';
 
 type Articles = {
   id: number;
@@ -15,6 +16,7 @@ const Articles = () => {
   const { articles } = useSelector((a: ReduxType) => a.articles);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchArticles = async () => {
     setIsLoading(true);
@@ -42,7 +44,11 @@ const Articles = () => {
       <div className="articles">
         {articles.length > 0 &&
           articles?.map((val: Articles) => (
-            <div className="article" key={val.id}>
+            <div
+              className="article"
+              key={val.id}
+              onClick={() => navigate(`/article/${val.id}`)}
+            >
               <div className="title">{val.title}</div>
               <div className="summary">{val.summary}</div>
             </div>
