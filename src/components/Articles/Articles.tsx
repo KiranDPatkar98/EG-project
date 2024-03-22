@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './articles.css';
 import Loading from '../Loading/Loading';
+import { useDispatch, useSelector } from 'react-redux';
+import { receivedArticles } from '../../redux/articleSlice';
+import { ReduxType } from '../../redux/store';
 
 type Articles = {
   id: number;
@@ -9,8 +12,9 @@ type Articles = {
 };
 
 const Articles = () => {
-  const [articles, setArticles] = useState<Articles[]>([]);
+  const { articles } = useSelector((a: ReduxType) => a.articles);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const fetchArticles = async () => {
     setIsLoading(true);
@@ -19,7 +23,8 @@ const Articles = () => {
         'https://ps-dev-1-partnergateway.patientsky.dev/assignment/articles'
       );
       const articles = await res.json();
-      setArticles(articles);
+      dispatch(receivedArticles(articles));
+      //   setArticles(articles);
     } catch (error) {
       console.error('Error fetching articles:', error);
     } finally {
@@ -36,7 +41,7 @@ const Articles = () => {
       {isLoading && <Loading />}
       <div className="articles">
         {articles.length > 0 &&
-          articles?.map((val) => (
+          articles?.map((val: Articles) => (
             <div className="article" key={val.id}>
               <div className="title">{val.title}</div>
               <div className="summary">{val.summary}</div>
