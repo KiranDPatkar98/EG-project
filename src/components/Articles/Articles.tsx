@@ -51,9 +51,9 @@ const ArticlesComponent  = () => {
   return (
     <div className="articles-container">
       {isLoading && <Loading />}
-      {errorMessage && <h1>{errorMessage}</h1>}
+      {errorMessage && articles.length ===0 &&  <h1>{errorMessage}</h1>}
       <div className="articles">
-        {!errorMessage && articles.length > 0 &&
+        {articles.length > 0 &&
           articles?.map((val: Articles) => (
             <div
               className="article"
