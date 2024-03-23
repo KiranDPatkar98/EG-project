@@ -10,22 +10,31 @@ type Article = {
   fullText: string;
 };
 
-const Article = () => {
+const ArticleComponent = () => {
   const { id } = useParams();
   const [details, setDetails] = useState<Article | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [errorMessage,setErrorMessage]=useState<string>('')
   const navigate = useNavigate();
 
   const fetchArticleDetails = async () => {
+    setErrorMessage('')
     try {
-      setIsLoading(true);
       const response = await fetch(
         `https://ps-dev-1-partnergateway.patientsky.dev/assignment/articles/${id}`
       );
-      const article = await response.json();
-      setDetails(article);
+      const data = await response.json();
+      if(data.code===500){
+        setErrorMessage(data?.message)
+        setDetails(null)
+      }else{
+      setDetails(data);
+      }
     } catch (error) {
-      console.error('Error fetching article details:', error);
+      if (error instanceof Error) {
+        setErrorMessage(error?.message)
+      }
+      setErrorMessage('Something went wrong ')
     } finally {
       setIsLoading(false);
     }
@@ -35,14 +44,19 @@ const Article = () => {
     fetchArticleDetails();
   }, [id]);
 
+  if(isLoading){
+    return <Loading />
+  }
+
   return (
     <div className="article-page">
-      {isLoading && <Loading />}
+      
       <button className="go-back-button" onClick={() => navigate(-1)}>
         Go Back
       </button>
       <div className="article-container">
-        {details && (
+        {errorMessage && <h1> {errorMessage}</h1>}
+        {!errorMessage && details && (
           <div className="article-details">
             <h1 className="article-title">{details.title}</h1>
             <p className="article-summary">{details.summary}</p>
@@ -54,4 +68,4 @@ const Article = () => {
   );
 };
 
-export default Article;
+export default ArticleComponent;

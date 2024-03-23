@@ -12,23 +12,32 @@ type Articles = {
   summary: string;
 };
 
-const Articles = () => {
+const ArticlesComponent  = () => {
   const { articles } = useSelector((a: ReduxType) => a.articles);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [errorMessage,setErrorMessage]=useState<string>('')
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const fetchArticles = async () => {
-    setIsLoading(true);
+    setErrorMessage('')
     try {
       const res = await fetch(
         'https://ps-dev-1-partnergateway.patientsky.dev/assignment/articles'
       );
-      const articles = await res.json();
-      dispatch(receivedArticles(articles));
-      //   setArticles(articles);
-    } catch (error) {
-      console.error('Error fetching articles:', error);
+      const data = await res.json();
+      if(data.code===500){
+        setErrorMessage(data?.message)
+
+      }else{
+        dispatch(receivedArticles(data));
+      }
+      
+    } catch (error ) {
+      if (error instanceof Error) {
+        setErrorMessage(error?.message)
+      }
+      setErrorMessage('Something went wrong ')
     } finally {
       setIsLoading(false);
     }
@@ -36,13 +45,15 @@ const Articles = () => {
 
   useEffect(() => {
     fetchArticles();
-  }, []);
+  },[]);
+
 
   return (
     <div className="articles-container">
       {isLoading && <Loading />}
+      {errorMessage && <h1>{errorMessage}</h1>}
       <div className="articles">
-        {articles.length > 0 &&
+        {!errorMessage && articles.length > 0 &&
           articles?.map((val: Articles) => (
             <div
               className="article"
@@ -58,4 +69,4 @@ const Articles = () => {
   );
 };
 
-export default Articles;
+export default ArticlesComponent ;

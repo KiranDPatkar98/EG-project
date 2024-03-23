@@ -18,8 +18,9 @@
 }
 
 .article:hover {
-  transform: translateY(5px);
+  transform: scale(1.02);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: rgb(223, 214, 214);
 }
 
 .title {

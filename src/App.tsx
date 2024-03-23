@@ -6,21 +6,31 @@ import {
   Navigate,
 } from 'react-router-dom';
 import './App.css';
-import Articles from './components/Articles/Articles';
 import store from './redux/store';
 import { Provider } from 'react-redux';
-import Article from './components/Article/Article';
+import Layout from './Layout';
+import ArticlesComponent from './components/Articles/Articles';
+import ArticleComponent from './components/Article/Article';
+
+
+function AppRouter() {
+  return (
+    <Layout>
+      <Routes>
+        <Route path="/articles" element={<ArticlesComponent  />} />
+        <Route path="/article/:id" element={<ArticleComponent />} />
+        <Route path="/" element={<Navigate replace to="/articles" />} />
+      </Routes>
+    </Layout>
+  );
+}
 
 function App() {
   return (
     <div className="App">
       <Provider store={store}>
         <Router>
-          <Routes>
-            <Route path="/articles" element={<Articles />} />
-            <Route path="/article/:id" element={<Article />} />
-            <Route path="/" element={<Navigate replace to="/articles" />} />
-          </Routes>
+         <AppRouter /> 
         </Router>
       </Provider>
     </div>
