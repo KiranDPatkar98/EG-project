@@ -24,17 +24,9 @@ class ErrorBoundary extends React.Component<Props, State> {
         if (hasError) {
             return (
                 <div className="error-container vertical-alignment">
-                    <img src="/assets/errorBoundary.png" className="pagenotfound" alt="error-container" />
-                    <div className="pagenotfound">
-                        <strong>
-                            Something went wrong
-                        </strong>
-                    </div>
-                    <div className="pagenotfound">
-                      Please contact administrator
-                    </div>
+                   <h1>Something went wrong please contact Administrator</h1>
                     <div className="button">
-                       <button>Refresh</button>
+                       <button onClick={()=>window.location.href}>Refresh</button>
                     </div>
                 </div>
             );

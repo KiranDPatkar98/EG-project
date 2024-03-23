@@ -20,6 +20,7 @@ function AppRouter() {
         <Route path="/articles" element={<ArticlesComponent  />} />
         <Route path="/article/:id" element={<ArticleComponent />} />
         <Route path="/" element={<Navigate replace to="/articles" />} />
+        <Route path="*" element={<Navigate replace to="/articles" />} />
       </Routes>
     </Layout>
   );

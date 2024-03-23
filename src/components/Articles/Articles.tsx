@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { receivedArticles } from '../../redux/articleSlice';
 import { ReduxType } from '../../redux/store';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 type Articles = {
   id: number;
@@ -22,26 +23,20 @@ const ArticlesComponent  = () => {
   const fetchArticles = async () => {
     setErrorMessage('')
     try {
-      const res = await fetch(
-        'https://ps-dev-1-partnergateway.patientsky.dev/assignment/articles'
-      );
-      const data = await res.json();
-      if(data.code===500){
-        setErrorMessage(data?.message)
-
+      const response = await axios.get('https://ps-dev-1-partnergateway.patientsky.dev/assignment/articles');
+        dispatch(receivedArticles(response?.data)); 
+    } catch (error ) {
+      if (axios.isAxiosError(error)){
+        setErrorMessage(error.response?.data.message)
       }else{
-        dispatch(receivedArticles(data));
+        setErrorMessage('Something went wrong ')
       }
       
-    } catch (error ) {
-      if (error instanceof Error) {
-        setErrorMessage(error?.message)
-      }
-      setErrorMessage('Something went wrong ')
     } finally {
       setIsLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchArticles();
@@ -62,6 +57,9 @@ const ArticlesComponent  = () => {
             >
               <div className="title">{val.title}</div>
               <div className="summary">{val.summary}</div>
+              <div className="overlay"> 
+              <div className="overlay-text">Click for more</div> 
+              </div>
             </div>
           ))}
       </div>
