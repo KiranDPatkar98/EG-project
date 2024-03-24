@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 import './article.css';
@@ -18,28 +18,27 @@ const ArticleComponent = () => {
   const [errorMessage,setErrorMessage]=useState<string>('')
   const navigate = useNavigate();
 
-  const fetchArticleDetails = async () => {
-    setErrorMessage('')
+  const fetchArticleDetails = useCallback(async () => {
+    setErrorMessage('');
     try {
       const response = await axios.get(
         `https://ps-dev-1-partnergateway.patientsky.dev/assignment/articles/${id}`
       );
-        setDetails(response?.data)
-    } catch (error ) {
-      if (axios.isAxiosError(error)){
-        setErrorMessage(error.response?.data.message)
-      }else{
-        setErrorMessage('Something went wrong ')
+      setDetails(response?.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(error.response?.data.message);
+      } else {
+        setErrorMessage('Something went wrong ');
       }
-      
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     fetchArticleDetails();
-  }, [id]);
+  }, [fetchArticleDetails]);
 
   if(isLoading){
     return <Loading />
